@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.didi.mapper.StatisticsMapper">
+
+	<select id="getDevcieIdList" resultType="java.lang.String"
+		parameterType="map">
+
+        SELECT device_no FROM e_device_log l LEFT JOIN e_device d ON d.id=l.device_id 
+        WHERE d.name=#{type,jdbcType=VARCHAR} AND log_date BETWEEN 
+        #{startTime,jdbcType=TIMESTAMP} AND
+		#{endTime,jdbcType=TIMESTAMP}
+
+	</select>
+
+
+	<select id="moneyStatistics" resultType="java.util.Map" parameterType="map">
+		SELECT
+
+		 (SELECT IFNULL(SUM(money),0) FROM e_wallet_log 
+		 WHERE log_type=4 
+		 AND transaction_id IS NOT NULL 
+		 AND DATE_FORMAT(log_date,"%Y-%m-%d")=DATE_FORMAT( #{day,jdbcType=VARCHAR} ,"%Y-%m-%d")
+		 ) chargeShare,
+
+		 (SELECT IFNULL(SUM(money),0) FROM e_wallet_log 
+		 WHERE log_type=0 
+		 AND transaction_id IS NOT NULL 
+		 AND DATE_FORMAT(log_date,"%Y-%m-%d")=DATE_FORMAT( #{day,jdbcType=VARCHAR} ,"%Y-%m-%d")
+		 ) chargeAmount,
+		 
+		 (SELECT IFNULL(SUM(money),0) FROM e_wallet_log 
+		 WHERE log_type=2 
+		 AND transaction_id IS NOT NULL 
+		 AND DATE_FORMAT(log_date,"%Y-%m-%d")=DATE_FORMAT( #{day,jdbcType=VARCHAR} ,"%Y-%m-%d")
+		 ) returnShare	 
+		 
+		 FROM DUAL;
+
+	</select>
+
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.didi.mapper.StuMapper">
+
+	<insert id="stuSave" parameterType="com.didi.po.Stu">
+		insert into stu (sid, sname, spass)
+		values (#{sid,jdbcType=INTEGER}, #{sname,jdbcType=VARCHAR},
+		#{spass,jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>
